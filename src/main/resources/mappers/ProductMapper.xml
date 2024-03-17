@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssg.productservice.mapper.ProductMapper">
+
+    <insert id="insert">
+        INSERT INTO  tbl_product(pname,price,inventory)
+        VALUES (#{pname},#{price},#{inventory})
+
+    </insert>
+
+    <select id="selectOne" resultType="com.ssg.productservice.domain.ProductVO">
+    SELECT * FROM TBL_PRODUCT WHERE pno = #{pno}
+
+    </select>
+
+    <select id="selectList" resultType="com.ssg.productservice.domain.ProductVO">
+        SELECT * FROM TBL_PRODUCT
+        <where>
+            <if test="keyword != null and keyword != ''">
+                PNAME like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+        order by pno desc limit #{skip}, #{size};
+
+    </select>
+    <select id="getCount" resultType="int">
+        select count(pno) from tbl_product
+        <where>
+            <if test="keyword != null and keyword != ''">
+                pname like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+    <insert id="updateOne">
+        UPDATE TBL_PRODUCT SET PNAME = #{pname}, price = #{price},
+                               inventory = #{inventory} WHERE pno = #{pno}
+    </insert>
+    <insert id="deletOne">
+    DELETE FROM TBL_PRODUCT WHERE PNO = #{pno}
+
+    </insert>
+
+</mapper>
+
